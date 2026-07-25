@@ -22,6 +22,7 @@ export async function GET(req: Request, {params}: {params: Promise<{playerId: st
             createdAt: 'desc',
         },
         select: {
+            nickname: true,
             reason: true,
             submitted_by: true,
             createdAt: true

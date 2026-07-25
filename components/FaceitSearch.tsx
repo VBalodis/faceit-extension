@@ -46,7 +46,7 @@ const [clipUrl,setClipUrl] = useState("")
         } 
         setLoading(true)
         const response = await fetch(`/api/faceit/player?nickname=${nickname}`)
-        if (!response.ok) return setError("bad request")
+        if (!response.ok) return setError("Faceit nicknames are case-sensitive. Please enter the nickname exactly as it appears on Faceit")
 
         //Распарс json
         const data = await response.json()
@@ -125,61 +125,244 @@ const [clipUrl,setClipUrl] = useState("")
     }
 
 
-    return <div className="max-w-md mx-auto bg-[#060606] p-6 rounded-2xl">
-        <div className="h-full  bg-[#2e2e2e] rounded-2xl p-4">
-        {loading && <p>Loading...</p>}
-        {error && <p>{error}</p>}
-        <h1 className="text-center text-xl text-orange-600">🏴‍☠️ FACEIT DEATHNOTE</h1>
-        <form className="flex flex-col items-center p-2" onSubmit={handleSearch}>
-        <input className="rounded-xl w-full p-2 mt-1" value={nickname} onChange={((e) => setNickname(e.target.value))}
-        />
-        <button 
-        className="mt-2 border-2 w-full border-orange-500 rounded-2xl p-2 hover:bg-orange-800 transition bg-orange-500 text-white font-semibold" 
-        onClick={handleSearch} disabled={loading}>Search</button>
-        </form>
+    return (
+<div className="min-h-screen bg-zinc-950 flex justify-center items-start p-6">
+    <div className="w-[420px] rounded-2xl bg-zinc-900 border border-zinc-700 shadow-2xl overflow-hidden">
 
-        <article className="">
-            {player && deathnoteData && (
-            <div className="flex flex-col items-center mt-4">
-            <img className="w-16 h-16 rounded-full object-cover" src={player.avatar} alt={player.nickname}/>
-            <header className="flex flex-col items-center">
-            <h2 className="mt-2 text-3xl font-bold text-orange-500">{player.nickname}</h2>
-            <p className="text-gray-400">{player.country}</p>
-            </header>
-
-            <section className="mt-6 w-full space-y-2 font-bold">
-            <p className="text-orange-500 text-center">Faggot Score: {deathnoteData.memeScore}</p>
-            <div className="bg-gray-600 h-3 rounded-full" 
-            style={{width: 100 + "%"}}>
-                <div className={`${scoreBadge(deathnoteData.memeScore)} h-3 rounded-full transition-all duration-500`}
-                style={{width: deathnoteData.memeScore.toString() + "%"}}></div>
+        <header className="flex items-center justify-between px-5 py-4 border-b border-zinc-700">
+            <h1 className="text-xl font-bold tracking-wider text-orange-500">
+                ☠ FACEIT DEATHNOTE
+            </h1>
+            <div className="flex items-center gap-2">
+                <div className="h-2 w-2 rounded-full bg-green-500"/>
+                <span className="text-sm text-green-400">
+                    Enabled
+                </span>
             </div>
-            <p className="text-orange-500 text-center font-bold">Subsmissions: {deathnoteData.count}</p>
-            </section>
 
-            <section className="flex flex-col items-center mt-2 p-2 rounded-2xl text-orange-500">
-                <p className="text-2xl mb-2 text-orange-500 font-bold">Last Reports</p> {deathnoteDataLastReport}</section>
-            <footer className="mt-2">
-            <button 
-            className="mt-2 p-2 w-full rounded-lg bg-orange-600 py-2 font-semibold text-white hover:bg-orange-800 transition" 
-            onClick={() => setShowForm(true)}>Submit to Deathnote</button>
-            </footer>
-            </div>
+        </header>
+        <section className="p-5">
+            <p className="text-sm text-zinc-400 mb-2">
+                Search Faceit Player
+            </p>
+            <form
+                className="space-y-3"
+                onSubmit={handleSearch}
+                >
+                <input
+                    value={nickname}
+                    onChange={(e)=>setNickname(e.target.value)}
+                    placeholder="Faceit nickname"
+                    className="
+                    w-full
+                    rounded-xl
+                    bg-zinc-800
+                    border
+                    border-zinc-700
+                    px-4
+                    py-3
+                    outline-none
+                    text-white
+                    focus:border-orange-500
+                    transition"/>
+                <button
+                    disabled={loading}
+                    className="
+                    w-full
+                    rounded-xl
+                    bg-orange-500
+                    py-3
+                    font-bold
+                    text-white
+                    hover:bg-orange-600
+                    transition">
+                    {loading ? "Searching..." : "Search"}
+                </button>
+            </form>
+            {error && (
+                <p className="mt-3 text-red-400 text-sm">
+                    {error}
+                </p>
             )}
-        </article>
-        
-        <div>
-            {player && showForm && deathnoteData &&(
-                <div>
-                    <textarea placeholder="reason" value={reason} onChange={((e) => setReason(e.target.value))}>Reason</textarea>
-                    <input placeholder="Your faceit nickname" value={submittedBy} onChange={((e) => setSubmittedBy(e.target.value))}/>
-                    <input placeholder="It would be more fun with a clip " value={clipUrl} onChange={((e) => setClipUrl(e.target.value))}/>
-                    <br/>
-                    <button onClick={handleSubmit}>Submit to Deathnote</button>
+        </section>
+
+        {player && deathnoteData && (
+        <>
+        <section className="border-t border-zinc-700 p-6 flex flex-col items-center">
+    {player.avatar ? (
+        <img
+            src={player.avatar}
+            alt={player.nickname}
+            className="
+            w-24
+            h-24
+            rounded-full
+            border-4
+            border-orange-500
+            object-cover
+            shadow-lg"/>
+    ) : (
+        <div className="
+            w-24
+            h-24
+            rounded-full
+            border-4
+            border-orange-500
+            bg-zinc-800
+            flex
+            items-center
+            justify-center
+            text-3xl
+            font-bold
+            text-zinc-500
+            shadow-lg">
+            {player.nickname?.[0]?.toUpperCase()}
+        </div>
+    )}
+    <h2 className="mt-4 text-3xl font-bold text-orange-400">
+        {player.nickname}
+    </h2>
+    <p className="text-zinc-400 mt-1">
+        {player.country}
+    </p>
+</section>
+
+        <section className="border-t border-zinc-700 p-5">
+            <div className="flex justify-between mb-2">
+                <span className="font-semibold text-zinc-300">
+                    MemeScore
+                </span>
+                <span className="font-bold text-orange-500">
+                    {deathnoteData.memeScore}/100
+                </span>
+            </div>
+            <div className="h-3 rounded-full bg-zinc-700 overflow-hidden">
+                <div
+                    style={{
+                        width:`${deathnoteData.memeScore}%`
+                    }}
+                    className={`
+                    ${scoreBadge(deathnoteData.memeScore)}
+                    h-full
+                    transition-all
+                    duration-700`}/>
+            </div>
+            <div className="mt-4 flex justify-between">
+                <span className="text-zinc-400">
+                    Reports
+                </span>
+                <span className="text-orange-500 font-bold">
+                    {deathnoteData.count}
+                </span>
+            </div>
+        </section>
+        <section className="border-t border-zinc-700 p-5">
+            <h3 className="text-lg font-bold text-orange-500 mb-4">
+                Latest Reports
+            </h3>
+            <div className="space-y-3">
+                {deathnoteDataLastReport}
+            </div>
+        </section>
+        <section className="border-t border-zinc-700 p-5">
+            {!showForm && (
+                <button
+                    onClick={()=>setShowForm(true)}
+                    className="
+                    w-full
+                    rounded-xl
+                    bg-orange-500
+                    py-3
+                    font-bold
+                    text-white
+                    hover:bg-orange-600
+                    transition">
+                    Submit Report
+                </button>
+            )}
+
+            {showForm && (
+                <div className="space-y-4">
+                    <h3 className="text-lg font-bold text-orange-500">
+                        Submit Report
+                    </h3>
+                    <textarea
+                        placeholder="Reason..."
+                        value={reason}
+                        onChange={(e)=>setReason(e.target.value)}
+                        className="
+                        w-full
+                        rounded-xl
+                        bg-zinc-800
+                        border
+                        border-zinc-700
+                        p-3
+                        outline-none
+                        text-white
+                        resize-none
+                        h-28
+                        focus:border-orange-500"/>
+                    <input
+                        placeholder="Your Faceit nickname"
+                        value={submittedBy}
+                        onChange={(e)=>setSubmittedBy(e.target.value)}
+                        className="
+                        w-full
+                        rounded-xl
+                        bg-zinc-800
+                        border
+                        border-zinc-700
+                        p-3
+                        outline-none
+                        text-white
+                        focus:border-orange-500"/>
+                    <input
+                        placeholder="Clip URL (optional)"
+                        value={clipUrl}
+                        onChange={(e)=>setClipUrl(e.target.value)}
+                        className="
+                        w-full
+                        rounded-xl
+                        bg-zinc-800
+                        border
+                        border-zinc-700
+                        p-3
+                        outline-none
+                        text-white
+                        focus:border-orange-500"/>
+
+                    <div className="flex gap-3">
+                        <button
+                            onClick={()=>setShowForm(false)}
+                            className="
+                            flex-1
+                            rounded-xl
+                            bg-zinc-700
+                            py-3
+                            hover:bg-zinc-600
+                            transition">
+                            Cancel
+                        </button>
+
+                        <button
+                            onClick={handleSubmit}
+                            className="
+                            flex-1
+                            rounded-xl
+                            bg-orange-500
+                            py-3
+                            font-bold
+                            text-white
+                            hover:bg-orange-600
+                            transition">
+                            Submit
+                        </button>
+                    </div>
                 </div>
             )}
-            
-        </div>
-        </div>
+        </section>
+        </>
+        )}
     </div>
-}
+</div>
+)}

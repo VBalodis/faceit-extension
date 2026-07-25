@@ -25,6 +25,7 @@ export async function GET(req: Request) {
     const submissions = await prisma.deathnoteSubmission.findMany({
         where,
         select: {
+            nickname: true,
             reason: true,
             submitted_by: true,
             id: true,

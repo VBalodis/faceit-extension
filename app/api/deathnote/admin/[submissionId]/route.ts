@@ -1,14 +1,16 @@
 import { prisma } from "@/lib/prisma"
+import { cookies } from "next/headers"
 
 export async function PATCH(req: Request, {params}: {params: Promise<{submissionId: string}>}) {
     const rawData = await req.json()
     const status = rawData.status
     const {submissionId} = await params
-    const adminKey = req.headers.get("x-admin-key")
-    const ADMIN_SECRET = process.env.ADMIN_SECRET
+    const cookieStore = await cookies();
+    const token = cookieStore.get("admin_session")
 
-    
-    if (adminKey !== ADMIN_SECRET) return Response.json({error: "no admin"},{status: 401})
+    if (token?.value !== "authenticated") {
+        return Response.json({error: "Unauthorized"}, {status: 401})
+    }
      
     try {
     if (status === "APPROVED" || status === "REJECTED") {
