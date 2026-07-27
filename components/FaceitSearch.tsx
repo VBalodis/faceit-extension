@@ -103,9 +103,11 @@ const [clipUrl,setClipUrl] = useState("")
         return (
         <div 
         key={`${report.submitted_by}-${report.createdAt}`}
-        className="border-2 border-orange-500 rounded-2xl p-2 mt-2 space-y-2">{report.reason}
-        <p>Submitted by :{report.submitted_by}</p>
-        <p>Created at: {new Date(report.createdAt).toLocaleDateString()}</p>
+        className="border-2 border-orange-500 rounded-2xl p-2 mt-2 space-y-2 text-zinc-500">{report.reason}
+        <p className="mt-3 flex justify-between text-xs text-zinc-500"
+        >Submitted by :{report.submitted_by}</p>
+        <p className="mt-3 flex justify-between text-xs text-zinc-500"
+        >Created at: {new Date(report.createdAt).toLocaleDateString()}</p>
         </div>
     )
     })
@@ -127,7 +129,7 @@ const [clipUrl,setClipUrl] = useState("")
 
     return (
 <div className="min-h-screen bg-zinc-950 flex justify-center items-start p-6">
-    <div className="w-[420px] rounded-2xl bg-zinc-900 border border-zinc-700 shadow-2xl overflow-hidden">
+    <div className="w-[420px] rounded-2xl bg-gradient-to-b from-zinc-900 to-black border border-zinc-700 shadow-2xl overflow-hidden">
 
         <header className="flex items-center justify-between px-5 py-4 border-b border-zinc-700">
             <h1 className="text-xl font-bold tracking-wider text-orange-500">
@@ -143,7 +145,7 @@ const [clipUrl,setClipUrl] = useState("")
         </header>
         <section className="p-5">
             <p className="text-sm text-zinc-400 mb-2">
-                Search Faceit Player
+                🔍 Search Faceit Player
             </p>
             <form
                 className="space-y-3"
@@ -229,24 +231,37 @@ const [clipUrl,setClipUrl] = useState("")
 
         <section className="border-t border-zinc-700 p-5">
             <div className="flex justify-between mb-2">
-                <span className="font-semibold text-zinc-300">
+                <span className="font-medium text-zinc-300">
                     MemeScore
                 </span>
-                <span className="font-bold text-orange-500">
-                    {deathnoteData.memeScore}/100
+                <span
+                className={`font-bold ${
+                deathnoteData.memeScore >= 80
+                ? "text-red-500"
+                : deathnoteData.memeScore >= 50
+                ? "text-orange-400"
+                : "text-green-400"
+                }`}
+                >
+                {deathnoteData.memeScore}/100
                 </span>
             </div>
             <div className="h-3 rounded-full bg-zinc-700 overflow-hidden">
-                <div
-                    style={{
-                        width:`${deathnoteData.memeScore}%`
-                    }}
-                    className={`
-                    ${scoreBadge(deathnoteData.memeScore)}
-                    h-full
-                    transition-all
-                    duration-700`}/>
+            <div
+                className={`${scoreBadge(deathnoteData.memeScore)}
+                h-full transition-all duration-700`}
+                style={{ width: `${deathnoteData.memeScore}%` }}
+            />
             </div>
+            <p className="mt-2 text-xs text-zinc-500 text-center">
+                {deathnoteData.memeScore >= 80
+                    ? "☠ Extremely Dangerous"
+                    : deathnoteData.memeScore >= 60
+                    ? "⚠ Suspicious"
+                    : deathnoteData.memeScore >= 20
+                    ? "🙂 Mostly Safe"
+                    : "✅ Clean"}
+            </p>
             <div className="mt-4 flex justify-between">
                 <span className="text-zinc-400">
                     Reports
@@ -276,7 +291,10 @@ const [clipUrl,setClipUrl] = useState("")
                     font-bold
                     text-white
                     hover:bg-orange-600
-                    transition">
+                    transition-all
+                    duration-300
+                    animate-in
+                    fade-in">
                     Submit Report
                 </button>
             )}
