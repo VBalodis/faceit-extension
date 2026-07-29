@@ -1,12 +1,14 @@
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
   provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  url       = env("DATABASE_URL")   // Для обычных запросов (Pooler)
+  directUrl = env("DIRECT_URL")     // Для миграций и db push (Direct)
 }
+
 
 model DeathnoteSubmission {
   id            String            @id @default(cuid())
