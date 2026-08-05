@@ -255,12 +255,16 @@ const [clipUrl,setClipUrl] = useState("")
             </div>
             <p className="mt-2 text-xs text-zinc-500 text-center">
                 {deathnoteData.memeScore >= 80
-                    ? "☠ Extremely Dangerous"
+                    ? "☠ КОНЧЕНОЕ УЕБИЩЕ"
                     : deathnoteData.memeScore >= 60
-                    ? "⚠ Suspicious"
-                    : deathnoteData.memeScore >= 20
-                    ? "🙂 Mostly Safe"
-                    : "✅ Clean"}
+                    ? "⚠ ЧУДИЩЕ"
+                    : deathnoteData.memeScore >= 45
+                    ? "⚠ Мразь)"
+                    : deathnoteData.memeScore >= 30
+                    ? "🙂 Чудик)"
+                    : deathnoteData.memeScore >= 15
+                    ? "✅ Приколист)"
+                    : "✅ Нормис"}
             </p>
             <div className="mt-4 flex justify-between">
                 <span className="text-zinc-400">
