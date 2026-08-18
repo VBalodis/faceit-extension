@@ -52,20 +52,6 @@ The long-term goal is to build:
 * Full website platform
 * Community-driven meme ecosystem
 
-## Local Development
-
-Install dependencies:
-
-```bash
-npm install
-```
-
-Run development server:
-
-```bash
-npm run dev
-```
-
 Open:
 
-http://localhost:3000
+https://faceit-extension.vercel.app/
