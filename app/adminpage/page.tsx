@@ -42,8 +42,6 @@ export default function AdminPage() {
                 throw new Error (`HTTP error Status: ${response.status}`)
             }
             const data = await response.json()
-            console.log(data);
-            console.log(data.submissions)
             setSubmissions(data.submissions)
         } catch (error) {
             setError(true)
@@ -165,6 +163,9 @@ export default function AdminPage() {
             type="password"
             />
             <button>Log in</button>
+            {LoginError && (
+                <p className="text-red-500 mt-2">{LoginError}</p>
+            )}
         </form> 
     )
 
